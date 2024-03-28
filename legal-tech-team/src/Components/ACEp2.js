@@ -29,7 +29,7 @@ function ACEp2() {
     if (existingDataACE) {
       setFormDataACE(existingDataACE);
     }
-  }, []); 
+  }, []);
 
   const [formDataACE, setFormDataACE] = useState({
     emotionalAbuse: "",
@@ -63,11 +63,17 @@ function ACEp2() {
 
   const handleRadioChange = (e) => {
     const { id, value } = e.target;
-    setFormDataACE({ ...formDataACE, [id]: { ...formDataACE[id], [id]: value }});
+    setFormDataACE({
+      ...formDataACE,
+      [id]: { ...formDataACE[id], [id]: value },
+    });
   };
 
   const handleQuotesChange = (subSection, newQuotes) => {
-    setFormDataACE({ ...formDataACE, [subSection]: { ...formDataACE[subSection], ["notes"]: newQuotes }});
+    setFormDataACE({
+      ...formDataACE,
+      [subSection]: { ...formDataACE[subSection], ["notes"]: newQuotes },
+    });
   };
 
   return (
@@ -224,36 +230,52 @@ function ACEp2() {
                 onChange={handleACEChange}
               />
             </Grid>
-          
 
-          <Grid container spacing={3} marginTop={1}>
-            <RadioYesNo 
-                  id={"diagnosedSUD"}
-                  ection={"adverseChildhoodExpriences"}
-                  question={"Ever been diagnosed with substance use disorder (SUD)?"} 
-                  value={formDataACE.diagnosedSUD?.diagnosedSUD}
-                  onChange={handleRadioChange}
-                  checkedValue={formDataACE.diagnosedSUD?.diagnosedSUD}
-                  handleQuotesChange={newQuotes => handleQuotesChange("diagnosedSUD", newQuotes)}
-                />
-            <RadioYesNo 
-              id={"treatedSUD"}
-              section={"adverseChildhoodExpriences"}
-              question={"Ever been tested or treated for SUD?"} 
-              value={formDataACE.treatedSUD?.treatedSUD}
-              onChange={handleRadioChange}
-              checkedValue={formDataACE.treatedSUD?.treatedSUD}
-              handleQuotesChange={newQuotes => handleQuotesChange("treatedSUD", newQuotes)}
-            />
-          </Grid>
+            <Grid container spacing={3} marginTop={1}>
+              <RadioYesNo
+                id={"diagnosedSUD"}
+                ection={"adverseChildhoodExpriences"}
+                question={
+                  "Ever been diagnosed with substance use disorder (SUD)?"
+                }
+                value={formDataACE.diagnosedSUD?.diagnosedSUD}
+                onChange={handleRadioChange}
+                checkedValue={formDataACE.diagnosedSUD?.diagnosedSUD}
+                handleQuotesChange={(newQuotes) =>
+                  handleQuotesChange("diagnosedSUD", newQuotes)
+                }
+              />
+              <RadioYesNo
+                id={"treatedSUD"}
+                section={"adverseChildhoodExpriences"}
+                question={"Ever been tested or treated for SUD?"}
+                value={formDataACE.treatedSUD?.treatedSUD}
+                onChange={handleRadioChange}
+                checkedValue={formDataACE.treatedSUD?.treatedSUD}
+                handleQuotesChange={(newQuotes) =>
+                  handleQuotesChange("treatedSUD", newQuotes)
+                }
+              />
+            </Grid>
           </Box>
-
         </Box>
-        <Button variant="contained" onClick={() => navigate("/aceOne")}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            SaveJSON(formDataACE, "adverseChildhoodExpriences");
+            navigate("/aceOne");
+          }}
+        >
           Previous
         </Button>
         <span style={{ marginLeft: "10px", marginRight: "10px" }}></span>
-        <Button variant="contained" onClick={() => { SaveJSON(formDataACE, "adverseChildhoodExpriences"); navigate("/peers-role-models"); }}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            SaveJSON(formDataACE, "adverseChildhoodExpriences");
+            navigate("/peers-role-models");
+          }}
+        >
           Next
         </Button>
       </Paper>

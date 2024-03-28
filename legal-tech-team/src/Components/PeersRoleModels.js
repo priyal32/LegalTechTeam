@@ -41,14 +41,14 @@ function PeersRoleModels() {
     {
       label: "Enjoy or admire the gangsta lifestyle",
     },
-  ]
+  ];
 
   useEffect(() => {
     const existingData = ReturnExistingInput("peersAndRoleModels");
     if (existingData) {
       setFormData(existingData);
     }
-  }, []); 
+  }, []);
 
   const [formData, setFormData] = useState({
     associationWithPeers: "",
@@ -75,7 +75,7 @@ function PeersRoleModels() {
     },
     affectedByMentalHealth: {
       affectedByMentalHealth: "",
-      notes: [], 
+      notes: [],
     },
     otherRiskFactors: "",
   });
@@ -86,16 +86,19 @@ function PeersRoleModels() {
 
   const handleRadioChange = (e) => {
     const { id, value } = e.target;
-    setFormData({ ...formData, [id]: { ...formData[id], [id]: value }});
+    setFormData({ ...formData, [id]: { ...formData[id], [id]: value } });
   };
 
   const handleDropdownChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: { ...formData[name], [name]: value }});
-  }
+    setFormData({ ...formData, [name]: { ...formData[name], [name]: value } });
+  };
 
-  const handleQuotesChange = (subSection, newQuotes) => {    
-    setFormData({ ...formData, [subSection]: { ...formData[subSection], ["notes"]: newQuotes }});
+  const handleQuotesChange = (subSection, newQuotes) => {
+    setFormData({
+      ...formData,
+      [subSection]: { ...formData[subSection], ["notes"]: newQuotes },
+    });
   };
 
   const options = ["None", "1", "< 5", "More than 5"];
@@ -136,18 +139,20 @@ function PeersRoleModels() {
                   Other traumatic experiences
                 </InputLabel>
               </Grid>
-              <Grid container spacing={4} justifyContent="flex-end" alignItems="center">
+              <Grid
+                container
+                spacing={4}
+                justifyContent="flex-end"
+                alignItems="center"
+              >
                 <Grid item>
                   <FormGroup>
                     {peerList.map((peer, index) => (
-                      <CheckboxWithAdd
-                        key={index}
-                        label={peer.label}
-                      />
+                      <CheckboxWithAdd key={index} label={peer.label} />
                     ))}
                   </FormGroup>
                 </Grid>
-              </Grid>               
+              </Grid>
             </Grid>
           </Box>
 
@@ -165,11 +170,18 @@ function PeersRoleModels() {
                   options={options}
                   id={"numberNeighborhoodCollege"}
                   section={"peersAndRoleModels"}
-                  question={"How many peers in your neighborhood went to college?"}
+                  question={
+                    "How many peers in your neighborhood went to college?"
+                  }
                   placeholder="Select an option"
-                  value={formData.numberNeighborhoodCollege?.numberNeighborhoodCollege}
+                  value={
+                    formData.numberNeighborhoodCollege
+                      ?.numberNeighborhoodCollege
+                  }
                   onChange={handleDropdownChange}
-                  handleQuotesChange={newQuotes => handleQuotesChange("numberNeighborhoodCollege", newQuotes)}
+                  handleQuotesChange={(newQuotes) =>
+                    handleQuotesChange("numberNeighborhoodCollege", newQuotes)
+                  }
                 />
                 <DropDown
                   options={options}
@@ -177,9 +189,13 @@ function PeersRoleModels() {
                   section={"peersAndRoleModels"}
                   question={"How many of them went to prison?"}
                   placeholder="Select an option"
-                  value={formData.numberNeighborhoodPrison?.numberNeighborhoodPrison}
+                  value={
+                    formData.numberNeighborhoodPrison?.numberNeighborhoodPrison
+                  }
                   onChange={handleDropdownChange}
-                  handleQuotesChange={newQuotes => handleQuotesChange("numberNeighborhoodPrison", newQuotes)}
+                  handleQuotesChange={(newQuotes) =>
+                    handleQuotesChange("numberNeighborhoodPrison", newQuotes)
+                  }
                 />
                 <DropDown
                   options={options}
@@ -187,9 +203,13 @@ function PeersRoleModels() {
                   section={"peersAndRoleModels"}
                   question={"How many relatives have been arrested?"}
                   placeholder="Select an option"
-                  value={formData.numberRelativesArrested?.numberRelativesArrested}
+                  value={
+                    formData.numberRelativesArrested?.numberRelativesArrested
+                  }
                   onChange={handleDropdownChange}
-                  handleQuotesChange={newQuotes => handleQuotesChange("numberRelativesArrested", newQuotes)}
+                  handleQuotesChange={(newQuotes) =>
+                    handleQuotesChange("numberRelativesArrested", newQuotes)
+                  }
                 />
               </Grid>
             </Grid>
@@ -259,35 +279,39 @@ function PeersRoleModels() {
                 onChange={handleChange}
               />
             </Grid>
-         
 
-          <Divider orientation="horizontal" flexItem />
+            <Divider orientation="horizontal" flexItem />
 
-          <Typography variant="h6" gutterBottom sx={{ ...themeTitle }}>
-            Any Other Risk Factors
-          </Typography>
+            <Typography variant="h6" gutterBottom sx={{ ...themeTitle }}>
+              Any Other Risk Factors
+            </Typography>
 
-
-          <Grid container spacing={3}>
-            <RadioYesNo 
-                  id={"mentalHealthIssues"}
-                  section={"peersAndRoleModels"}
-                  question={"Ever experienced mental health issues?"} 
-                  value={formData.mentalHealthIssues?.mentalHealthIssues}
-                  onChange={handleRadioChange}
-                  checkedValue={formData.mentalHealthIssues?.mentalHealthIssues}
-                  handleQuotesChange={newQuotes => handleQuotesChange("mentalHealthIssues", newQuotes)}
-                />
-            <RadioYesNo 
-              id={"affectedByMentalHealth"}
-              section={"peersAndRoleModels"}
-              question={"Ever been affected by mental health issues?"} 
-              value={formData.affectedByMentalHealth?.affectedByMentalHealth}
-              onChange={handleRadioChange}
-              checkedValue={formData.affectedByMentalHealth?.affectedByMentalHealth}
-              handleQuotesChange={newQuotes => handleQuotesChange("affectedByMentalHealth", newQuotes)}
-            />
-          </Grid>
+            <Grid container spacing={3}>
+              <RadioYesNo
+                id={"mentalHealthIssues"}
+                section={"peersAndRoleModels"}
+                question={"Ever experienced mental health issues?"}
+                value={formData.mentalHealthIssues?.mentalHealthIssues}
+                onChange={handleRadioChange}
+                checkedValue={formData.mentalHealthIssues?.mentalHealthIssues}
+                handleQuotesChange={(newQuotes) =>
+                  handleQuotesChange("mentalHealthIssues", newQuotes)
+                }
+              />
+              <RadioYesNo
+                id={"affectedByMentalHealth"}
+                section={"peersAndRoleModels"}
+                question={"Ever been affected by mental health issues?"}
+                value={formData.affectedByMentalHealth?.affectedByMentalHealth}
+                onChange={handleRadioChange}
+                checkedValue={
+                  formData.affectedByMentalHealth?.affectedByMentalHealth
+                }
+                handleQuotesChange={(newQuotes) =>
+                  handleQuotesChange("affectedByMentalHealth", newQuotes)
+                }
+              />
+            </Grid>
           </Box>
 
           {/*last input*/}
@@ -323,11 +347,23 @@ function PeersRoleModels() {
             </Grid>
           </Box>
         </Box>
-        <Button variant="contained" onClick={() => navigate("/aceTwo")}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            SaveJSON(formData, "peersAndRoleModels");
+            navigate("/aceTwo");
+          }}
+        >
           Previous
         </Button>
         <span style={{ marginLeft: "10px", marginRight: "10px" }}></span>
-        <Button variant="contained" onClick={() => { SaveJSON(formData, "peersAndRoleModels"); navigate("/mental-health"); }}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            SaveJSON(formData, "peersAndRoleModels");
+            navigate("/mental-health");
+          }}
+        >
           Next
         </Button>
       </Paper>

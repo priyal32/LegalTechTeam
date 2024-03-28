@@ -26,21 +26,30 @@ import { SaveJSON, ReturnExistingInput } from "../HelperFunctions/formatJSON";
 function Schooling() {
   const navigate = useNavigate();
   const themeTitle = themeSubHeading();
+  const [schoolImpact, setSchoolImpact] = useState([]);
 
   const schoolList = [
     {
       label: "Suspended",
+      id: "suspended",
+      subs: [],
     },
     {
       label: "Expelled",
+      id: "expelled",
+      subs: [],
     },
     {
       label: "Dropped Out",
+      id: "dropped-out",
+      subs: [],
     },
     {
       label: "None of the Above",
+      id: "none",
+      subs: [],
     },
-  ]
+  ];
 
   useEffect(() => {
     const existingData = ReturnExistingInput("schooling");
@@ -51,7 +60,16 @@ function Schooling() {
     if (existingDataACE) {
       setFormDataACE(existingDataACE);
     }
-  }, []); 
+    loadSavedData();
+  }, []);
+  const loadSavedData = () => {
+    const savedData = ReturnExistingInput("schooling");
+    console.log(savedData);
+    if (savedData && savedData.schoolImpact) {
+      console.log("in here");
+      setSchoolImpact(savedData.schoolImpact);
+    }
+  };
 
   const [formData, setFormData] = useState({
     schoolsAttended: "",
@@ -61,9 +79,7 @@ function Schooling() {
       schoolQuality: "",
       notes: [],
     },
-    wasSuspended: "",
-    wasExpelled: "",
-    didDropOut: "",
+    schoolImpact: "",
     noDisciplinaryAction: "",
   });
 
@@ -83,11 +99,14 @@ function Schooling() {
 
   const handleRadioChange = (e) => {
     const { id, value } = e.target;
-    setFormData({ ...formData, [id]: { ...formData[id], [id]: value }});
+    setFormData({ ...formData, [id]: { ...formData[id], [id]: value } });
   };
 
   const handleQuotesChange = (newQuotes) => {
-    setFormData({ ...formData, ["schoolQuality"]: { ...formData["schoolQuality"], ["notes"]: newQuotes }});
+    setFormData({
+      ...formData,
+      ["schoolQuality"]: { ...formData["schoolQuality"], ["notes"]: newQuotes },
+    });
   };
 
   const [quotes, setQuotes] = useState([]);
@@ -96,7 +115,15 @@ function Schooling() {
     setQuotes(newQuotes);
     handleQuotesChange(newQuotes);
   };
-
+  const handleSchoolImpactChange = (disadvantageId, isChecked) => {
+    setSchoolImpact((prevSelected) => {
+      if (isChecked) {
+        return [...prevSelected, disadvantageId];
+      } else {
+        return prevSelected.filter((id) => id !== disadvantageId);
+      }
+    });
+  };
   return (
     <div>
       <Header />
@@ -259,7 +286,12 @@ function Schooling() {
                   control={<Radio id={"schoolQuality"} />}
                   label="Excellent"
                 />
-                <AddQuotes quotes={quotes} section={"schooling"} id={"schoolQuality"} onQuotesChange={quotesAdded}  />
+                <AddQuotes
+                  quotes={quotes}
+                  section={"schooling"}
+                  id={"schoolQuality"}
+                  onQuotesChange={quotesAdded}
+                />
               </RadioGroup>
             </Grid>
           </Box>
@@ -279,18 +311,38 @@ function Schooling() {
                   fontWeight: 700,
                 }}
               >
-                Have you every been:
+                Have you ever been:
               </InputLabel>
             </Grid>
             <FormGroup
-              //onChange={handleChange}
+            //onChange={handleChange}
             >
               {schoolList.map((action, index) => (
-                <CheckboxWithAdd
-                  key={index}
-                  label={action.label}
-                />
+                <React.Fragment key={index}>
+                  <CheckboxWithAdd
+                    label={action.label}
+                    id={action.id}
+                    checked={schoolImpact.includes(action.id)}
+                    onChange={handleSchoolImpactChange}
+                  />
+                  {schoolImpact.includes(action.id) && (
+                    <React.Fragment>
+                      <div style={{ paddingLeft: 30 }}>
+                        {action.subs.map((sub, subIndex) => (
+                          <CheckboxWithAdd
+                            key={subIndex}
+                            label={sub.label}
+                            id={sub.id}
+                            checked={schoolImpact.includes(sub.id)}
+                            onChange={handleSchoolImpactChange}
+                          />
+                        ))}
+                      </div>
+                    </React.Fragment>
+                  )}
+                </React.Fragment>
               ))}
+
               {/* <CheckboxWithAdd>
                   <FormControlLabel
                     control={<Checkbox checked={formData.wasSuspended} onChange={handleChange} id="wasSuspended" />}
@@ -309,8 +361,7 @@ function Schooling() {
                     label="None of the above"
                   />
                 </CheckboxWithAdd> */}
-              </FormGroup>
-            
+            </FormGroup>
           </Box>
 
           <Divider orientation="horizontal" flexItem />
@@ -419,12 +470,37 @@ function Schooling() {
           </Box>
         </Box>
 
-        <Button variant="contained" onClick={() => navigate("/community")}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              schoolImpact: schoolImpact,
+            }));
+
+            SaveJSON(formData, "schooling");
+            SaveJSON(formDataACE, "adverseChildhoodExpriences");
+            navigate("/community");
+          }}
+        >
+          {" "}
           Previous
         </Button>
         <span style={{ marginLeft: "10px", marginRight: "10px" }}></span>
 
-        <Button variant="contained" onClick={() => { SaveJSON(formData, "schooling"); SaveJSON(formDataACE, "adverseChildhoodExpriences"); navigate("/aceOne"); }}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              schoolImpact: schoolImpact,
+            }));
+
+            SaveJSON(formData, "schooling");
+            SaveJSON(formDataACE, "adverseChildhoodExpriences");
+            navigate("/aceOne");
+          }}
+        >
           Next
         </Button>
       </Paper>
